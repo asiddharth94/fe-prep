@@ -15,11 +15,17 @@ Function.prototype.myCall = function (thisArg, ...args) {
   if (typeof this !== "function") {
     throw new Error(this + " is not callable");
   }
-  thisArg.callerFunc = this;
-  thisArg.callerFunc(...args);
+
+  const symbol = Symbol();
+
+  thisArg[symbol] = this;
+  const returnValue = thisArg[symbol](...args);
+
+  delete thisArg[symbol];
+  return returnValue;
 };
 
-// obj2.printMyName.myCall(obj, "KA");
+// obj2.printMyName.myCall(obj, "KA", "Bang");
 
 Function.prototype.myApply = function (thisArg, args) {
   if (typeof this !== "function") {
@@ -30,11 +36,18 @@ Function.prototype.myApply = function (thisArg, args) {
     throw new TypeError("Second argument is not an array");
   }
 
-  thisArg.callerFunc = this;
-  thisArg.callerFunc(...args);
+  return this.myCall(thisArg, ...args);
+
+  //   const symbol = Symbol();
+
+  //   thisArg[symbol] = this;
+  //   const returnValue = thisArg[symbol](...args);
+
+  //   delete thisArg[symbol];
+  //   return returnValue;
 };
 
-// obj2.printMyName.myApply(obj, ["KA"]);
+obj2.printMyName.myApply(obj, ["KA", "Bang"]);
 
 Function.prototype.myBind = function (thisArg, ...args) {
   var callerFunc = this;
@@ -43,5 +56,5 @@ Function.prototype.myBind = function (thisArg, ...args) {
   };
 };
 
-const copied = obj2.printMyName.myBind(obj, "KA");
-copied("Bengaluru");
+// const copied = obj2.printMyName.myBind(obj, "KA");
+// copied("Bengaluru");
