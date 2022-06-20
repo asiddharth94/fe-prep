@@ -47,14 +47,16 @@ Function.prototype.myApply = function (thisArg, args) {
   //   return returnValue;
 };
 
-obj2.printMyName.myApply(obj, ["KA", "Bang"]);
+// obj2.printMyName.myApply(obj, ["KA", "Bang"]);
 
 Function.prototype.myBind = function (thisArg, ...args) {
-  var callerFunc = this;
-  return function (...innerArgs) {
-    callerFunc.apply(thisArg, [...args, ...innerArgs]);
-  };
+  //   var callerFunc = this;
+  //   return function (...innerArgs) {
+  //     callerFunc.apply(thisArg, [...args, ...innerArgs]);
+  //   };
+
+  return (...innerArgs) => this.apply(thisArg, [...args, ...innerArgs]);
 };
 
-// const copied = obj2.printMyName.myBind(obj, "KA");
-// copied("Bengaluru");
+const copied = obj2.printMyName.myBind(obj, "CA");
+copied("Bengaluru");
